@@ -28,6 +28,17 @@ module UpdateMutation = [%graphql
   }
 |}
 ];
+module TodosQuery = [%graphql
+  {|
+    query TodosQuery {
+      todos: allTodos {
+        id
+        completed
+        text
+      }
+    }
+  |}
+];
 // type t_updateTodoItem_updatedTodoItem = {
 //   __typename: string,
 //   id: string,
@@ -35,9 +46,13 @@ module UpdateMutation = [%graphql
 //   completed: option(bool),
 // };
 [@react.component]
-let make = (~checked, ~todoItem as todoItemRef) => {
+let make =
+    (
+      ~checked,
+      ~todoItem as todoItemRef: UpdateMutation.t_variables_UpdateTodoItemInput,
+    ) => {
   let (updateTodo, updateTodoResult) = UpdateMutation.use();
-  switch (TodoQuery.use({id: todoItemRef})) {
+  switch (TodoQuery.use({id: todoItemRef.id})) {
   | {loading: true} => "Loading..."->React.string
   // | {error: Some(_error)} => "Error loading data"->React.string
   | {data: Some({todoItem: Some({todoItem})}), error} =>
@@ -71,28 +86,46 @@ let make = (~checked, ~todoItem as todoItemRef) => {
                       {
                         updateTodoItem:
                           Some({
-                            updatedTodoItem: {
-                              id: todoItem.id,
-                              completed:
-                                !
-                                  Belt.Option.getWithDefault(
-                                    todoItem.completed,
-                                    false,
-                                  ),
-                              text: todoItem.text,
-                            },
                             __typename: todoItem.__typename,
+                            updatedTodoItem:
+                              Some({
+                                __typename: todoItem.__typename,
+                                id: todoItem.id,
+                                text: todoItem.text,
+                                completed: Some(true),
+                                // clientMutationId: None,
+                              }),
                           }),
                       },
+                  // {
+                  //   updateTodoItem:
+                  //     Some({
+                  //       updatedTodoItem: {
+                  //         id: todoItem.id,
+                  // completed:
+                  //   !
+                  //     Belt.Option.getWithDefault(
+                  //       todoItem.completed,
+                  //       false,
+                  //     ),
+                  //         text: todoItem.text,
+                  //       },
+                  //       __typename: todoItem.__typename,
+                  //     }),
+                  // },
                   ~update=
                     (cache, {data}) =>
                       switch (data) {
-                      | Some({data}) =>
+                      | Some({updateTodoItem}) =>
                         /**
                    * Apollo docs use cache.modify, but it's not typesafe. I recommend some
                    * combination of readQuery / writeQuery / writeFragment
                    */
                         Js.log2("mutate.update To-Do: ", todoItem);
+                        Js.log2(
+                          "mutate.updateTodoItem To-Do: ",
+                          updateTodoItem,
+                        );
                         let _unusedRef =
                           cache->Cache.writeFragment(
                             ~fragment=(module Fragments.TodoItem),
@@ -108,12 +141,12 @@ let make = (~checked, ~todoItem as todoItemRef) => {
                           cache->Cache.writeQuery(
                             ~query=(module TodosQuery),
                             ~data={
-                              node: [|
+                              todos: [|
                                 {
-                                  __typename: todo.__typename,
-                                  id: "writeQueryToDo",
+                                  __typename: todoItem.__typename,
+                                  id: todoItem.id,
                                   completed: None,
-                                  text: "To-Do from writeQuery",
+                                  text: todoItem.text,
                                 },
                               |],
                             },
@@ -122,6 +155,15 @@ let make = (~checked, ~todoItem as todoItemRef) => {
                         ();
                       | None => ()
                       },
+                  ~refetchQueries=[|TodosQuery.refetchQueryDescription()|],
+                  {
+                    input: {
+                      id: todoItem.id,
+                      completed: false,
+                      text: todoItem.text,
+                      clientMutationId: None,
+                    },
+                  },
                 )
                 ->ignore
               }}

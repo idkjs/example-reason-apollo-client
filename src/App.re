@@ -9,7 +9,7 @@ let make = () => {
       <div className="container-fluid page-body-wrapper">
         // <React.Suspense fallback={<div> {React.string("Loading...")} </div>}>
         // <Main />
-         <h4> "Typical Query"->React.string </h4> <Query_Typical /> </div>
+         <h4> "Typical Query"->React.string </h4> <Main /> </div>
         // </React.Suspense>
     </div>;
 };

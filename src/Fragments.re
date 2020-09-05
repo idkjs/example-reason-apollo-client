@@ -18,9 +18,27 @@
 
 [%graphql
   {|
-  fragment Avatar_user on User {
+  fragment UserAvatar on User {
     avatarUrl
     fullName
   }
-|}
+  query User ($id:ID!){
+      userById(id:$id) {
+        ...UserAvatar
+      }
+    }
+|};
+  {inline: true}
+];
+
+// open Types;
+
+[%graphql
+  {|
+  fragment User on User @bsRecord {
+    avatarUrl
+    fullName
+  }
+|};
+  {inline: true}
 ];

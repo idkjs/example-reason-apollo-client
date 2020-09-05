@@ -3287,10 +3287,9 @@ readdirp@~3.4.0:
   dependencies:
     picomatch "^2.2.1"
 
-reason-apollo-client@^0.0.1-beta.7:
+reason-apollo-client@reasonml-community/reason-apollo-client:
   version "0.0.1-beta.7"
-  resolved "https://registry.yarnpkg.com/reason-apollo-client/-/reason-apollo-client-0.0.1-beta.7.tgz#0b0e9be837ee8d0ddfbadf342a6f65204a43f92e"
-  integrity sha512-qty8gOg6d9pF1AORsTRe+ST9q8aFEKTvVgRCFOMiAb5w0d6tWHqkIUEZrql3YQQ+RY+uasiOfg2jiQSnkhTQHg==
+  resolved "https://codeload.github.com/reasonml-community/reason-apollo-client/tar.gz/a18cf7f6836fbeaf9bd9ba1e438e7095a7244ca2"
 
 reason-promise@^1.1.1:
   version "1.1.1"

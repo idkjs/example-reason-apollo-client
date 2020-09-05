@@ -6,25 +6,24 @@
   "scripts": {
     "start": "yarn bs:clean && yarn bs:build && concurrently \"yarn webpack\" \"yarn bs:watch\"",
     "bs:build": "bsb -make-world",
-    "bs:watch": "BS_WATCH_CLEAR=true bsb -make-world -w",
-    "bs:clean": "bsb -clean-world",
+    "watch": "BS_WATCH_CLEAR=true bsb -make-world -w",
+    "clean": "bsb -clean-world",
     "webpack": "webpack-dev-server",
     "schema":"npx get-graphql-schema http://localhost:4000/graphql -j > graphql_schema.json",
-    "gql":"npx get-graphql-schema http://localhost:4000/graphql > schema.graphql",
-    "relay": "reason-relay-compiler",
-    "relay:watch": "reason-relay-compiler --watch"
+    "gql":"npx get-graphql-schema http://localhost:4000/graphql > schema.graphql"
   },
   "dependencies": {
     "@apollo/client": "3.0.1",
     "@yawaramin/prometo": "0.11.0",
-    "reason-apollo-client": "^0.0.1-beta.7",
+
     "@mdi/font": "3.7.95",
     "bootstrap": "^4.3.1",
     "bs-fetch": "^0.5.0",
     "concurrently": "^5.0.0",
     "graphql": "^14.5.8",
-    "react": "0.0.0-experimental-d28bd2994",
-    "react-dom": "0.0.0-experimental-d28bd2994",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "reason-apollo-client": "^0.0.1-beta.7",
     "reason-promise": "^1.1.1",
     "reason-react": "^0.9.1",
     "subscriptions-transport-ws": "^0.9.18"
@@ -38,11 +37,5 @@
     "webpack-dev-server": "^3.9.0"
   },
   "author": "bootstrapdash",
-  "url": "http://www.bootstrapdash.com/",
-  "copyright": "",
-  "license": "",
-  "resolutions": {
-    "react": "0.0.0-experimental-d28bd2994",
-    "react-dom": "0.0.0-experimental-d28bd2994"
-  }
+  "url": "http://www.bootstrapdash.com/"
 }

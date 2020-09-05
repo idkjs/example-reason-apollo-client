@@ -1,0 +1,29 @@
+fragment User on User {
+  avatarUrl
+  fullName
+}
+fragment Ticket on Ticket {
+  assignee {
+    ... on User {
+      ...User
+    }
+    ... on WorkingGroup {
+      id
+      name
+    }
+  }
+  id
+  subject
+  status
+  lastUpdated
+}
+
+query($offset: Int!, $limit: Int!) {
+  tickets(offset: $offset, limit: $limit) {
+    __typename
+    hasNextPage
+    results {
+      ...Ticket
+    }
+  }
+}
