@@ -8,3 +8,5 @@ lib
 dist
 .bsb.lock
 .merlin
+srcV1
+.DS_Store

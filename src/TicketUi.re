@@ -1,5 +1,3 @@
-open Types;
-
 let str = React.string;
 
 let decodeDate = date =>
@@ -7,24 +5,21 @@ let decodeDate = date =>
   ->Belt.Option.flatMap(Js.Json.decodeString)
   ->Belt.Option.map(Js.Date.fromString);
 
-[%graphql
+let decodedDate = date => {
+  let date = date->decodeDate;
+  switch (date) {
+  | Some(date) => date->Js.Date.toLocaleString
+  | None => "-"
+  };
+};
+module Fragment = [%graphql
   {|
-  fragment User on User @bsRecord {
-    avatarUrl
-    fullName
-  }
-|}
-];
-
-module TicketFragment = [%graphql
-  {|
-  
-  fragment Ticket on Ticket @bsRecord {
+  fragment Ticket on Ticket  {
     assignee {
       ... on User {
         ...User
       }
-      ... on WorkingGroup @bsRecord {
+      ... on WorkingGroup  {
         id
         name
       }
@@ -38,13 +33,14 @@ module TicketFragment = [%graphql
 ];
 
 [@react.component]
-let make = (~ticket) => {
+let make = (~ticket: TicketFragment.t) => {
   <tr>
     <td>
       {switch (ticket.assignee) {
        | Some(assignee) =>
          switch (assignee) {
-         | `User(user) => <Avatar2 user />
+         | `User(user) => <Avatar user />
+         | `FutureAddedValue(_) => React.null
          | `WorkingGroup(workingGroup) =>
            <strong> {str(workingGroup.name)} </strong>
          }
@@ -53,11 +49,6 @@ let make = (~ticket) => {
     </td>
     <td> {str(ticket.subject)} </td>
     <td> <TicketStatusBadge status={ticket.status} /> </td>
-    <td>
-      {ticket.lastUpdated
-       ->Belt.Option.mapWithDefault("-", Js.Date.toLocaleString)
-       ->str}
-    </td>
+    <td> {str(ticket.lastUpdated->decodedDate)} </td>
   </tr>;
 };
-

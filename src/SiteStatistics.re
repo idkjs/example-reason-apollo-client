@@ -1,8 +1,12 @@
-open Types;
+// type siteStatistics = {
+//   weeklySales: float,
+//   weeklyOrders: int,
+//   currentVisitorsOnline: int,
+// };
 
 module Fragment = [%graphql
   {|
-  fragment Statistics on SiteStatistics @bsRecord {
+  fragment Statistics on SiteStatistics {
     weeklySales
     weeklyOrders
     currentVisitorsOnline
@@ -11,7 +15,7 @@ module Fragment = [%graphql
 ];
 
 [@react.component]
-let make = (~statistics) => {
+let make = (~statistics:Statistics.t) => {
   <div className="row">
     <div className="col-md-4 stretch-card grid-margin">
       <EmphasizedCard
