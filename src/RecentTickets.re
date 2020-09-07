@@ -55,7 +55,53 @@ let make = () => {
       )
     | _ => (false, 0)
     };
+  //   let handleLoadMore = () => {
+  //     let variables: TicketsQuery.TicketsQuery_inner.t_variables =
+  //       TicketsQuery.makeVariables(~offset=0, ~limit, ());
+  // queryResult
+  //                ->QueryResult.fetchMore(
+  //                    ~updateQuery=
+  //                      (previousData, {fetchMoreResult}) => {
+  //                        switch (fetchMoreResult) {
+  //                        | Some({tickets: newTickets}) => {
+  //         let prevResult = previousData;
 
+  //         let mergedResult:TicketsQuery.TicketsQuery_inner.t_tickets = {
+  //           // tickets: {
+  //             // __typename: prevResult.__typename,
+  //             // hasNextPage: prevResult.hasNextPage,
+  //             // results: prevResult->Belt.Array.concat([|_|],results),
+  //           // },
+  //         };
+  //                            {tickets:
+  //                              Belt.Array.concat(previousData.tickets, newTickets),
+  //                          }}
+  //                        | None => previousData
+  //                        }
+  //                      },
+  //                    (),
+  //                  )
+  //                ->ignore
+  //     QueryResult.fetchMore(
+  //       ~variables, ~updateQuery=(previousData, {fetchMoreResult}) => {
+  //       switch (fetchMoreResult) {
+  //       | Some({tickets:newTickets}) =>
+  //         let prevResult = previousData.results;
+
+  //         let mergedResult = {
+  //           tickets: {
+  //             __typename: prevResult.__typename,
+  //             hasNextPage: prevResult.hasNextPage,
+  //             results: prevResult.results->Belt.Array.concat(results),
+  //           },
+  //         };
+  //         ();
+
+  //       | None => previousData
+  //       }
+  //     })
+  //     |> ignore;
+  //   };
   let handleLoadMore = () => {
     QueryResult.fetchMore(
       ~variables=TicketsQuery.makeVariables(~offset, ~limit, ()),

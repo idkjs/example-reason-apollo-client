@@ -79,7 +79,7 @@ let make = () => {
       <div className="list-wrapper">
         <ul className="d-flex flex-column-reverse todo-list todo-list-custom">
           {switch (todosResult) {
-           | {data: Some(data)} =>
+           | {loading: false, data: Some(data)} =>
              {
                data.allTodos
                ->Belt.Array.map(todo =>
@@ -87,10 +87,15 @@ let make = () => {
                  );
              }
              |> React.array
-           | {loading} => <Spinner />
+           | {loading: true} => <Spinner />
            | {error} =>
-             <div> {"Ooops! En error occured." |> React.string} </div>
-           | {data: None} => React.null
+             <div>
+               "Error loading data"->React.string
+               {switch (error) {
+                | Some(error) => React.string(": " ++ error.message)
+                | None => React.null
+                }}
+             </div>
            }}
         </ul>
       </div>

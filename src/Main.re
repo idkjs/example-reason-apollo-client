@@ -7,11 +7,21 @@ module MainConfig = [%graphql
   }
 |}
 ];
+// module Query = [%graphql
+//   {|
+//   query {
+//     siteStatistics {
+//       ...Statistics
+//     }
+//   }
+// |}
+// ];
 
 [@react.component]
 let make = () => {
   let simple = MainConfig.use();
-
+  // let query = Query.use();
+  // let x = Query.makeDefaultVariables();
   <div className="main-panel">
     <div className="content-wrapper">
       <Header />
@@ -30,6 +40,9 @@ let make = () => {
       <div className="row">
         <div className="col-7 grid-margin"> <RecentTickets /> </div>
         <div className="col-5 grid-margin"> <TodoList /> </div>
+        <div className="col-5 grid-margin">
+          // <TodoList2 query={x} />
+        </div>
       </div>
     </div>
   </div>;
